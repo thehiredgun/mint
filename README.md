@@ -4,29 +4,30 @@ A crisp PDO-abstraction layer class
 ### Installation:
 Recommended installation is via [Composer](https://getcomposer.org).
 
-`composer require thehiredgun/mint`
+```composer require thehiredgun/mint````
 
 or
 
-`"require": {
+```"require": {
     ...,
     "thehiredgun/mint": "^1.0",
     ...
-}`
+}```
 
 ### Quick-Start:
 *mint* is here to provide a crisp, clean interface between application and database layers.
 It uses the PDO object you hand it, gathers some meta data for your database, then makes your
 life easier by giving you methods to do just about anything you need to do, with one line of PHP.
 
-`use TheHiredGun\Mint\Mint;
+```use TheHiredGun\Mint\Mint;
 ...
 
 // Mint::__construct takes a PDO object as it's argument
 $db = new Mint(new PDO($dsn, $username, $password));
-`
+```
 These first four methods are used when you write a query manually
-`// Mint::select, selectOne, update, and delete all take:
+```
+// Mint::select, selectOne, update, and delete all take:
 // a query as its first argument
 // and optionally an associative array of 'column_name' => $columnValue parameters to match *your query*
 
@@ -46,11 +47,12 @@ $rowCount = $db->update('UPDATE books SET author = :author WHERE title in("Pale 
 
 // Mint::delete returns $stmt->rowCount()`
 $rowCount = $db->delete('DELETE FROM books WHERE author = :author', ['author' => 'Vladimir Nabokov']);
+```
 
 ### Shorthand Methods
 There are a few shorthand methods which makes a lot of database-related work go much more quickly:
 
-`
+```
 // Mint::selectOneById
 // takes a Table Name and the record's Primary Key as arguments
 // returns the record from that table with that primary key
@@ -73,7 +75,7 @@ $bookId = $db->insertOne('books', ['author' => 'Vladimir Nabokov', 'title' => 'P
 // third argument is the primary key of the recordy you want to update
 // returns $stmt->rowCount()
 $db->updateOne('books', ['author' => 'Vladimir Nabokov'], $bookId);
-`
+```
 
 ### Hints & Best Practices
 - Generally speaking you want to configure your PDO error mode to 'Exception: `$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)`
