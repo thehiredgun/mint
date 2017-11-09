@@ -8,18 +8,21 @@ Recommended installation is via [Composer](https://getcomposer.org).
 
 or
 
-```"require": {
+```
+"require": {
     ...,
     "thehiredgun/mint": "^1.0",
     ...
-}```
+}
+```
 
 ### Quick-Start:
 *mint* is here to provide a crisp, clean interface between application and database layers.
 It uses the PDO object you hand it, gathers some meta data for your database, then makes your
 life easier by giving you methods to do just about anything you need to do, with one line of PHP.
 
-```use TheHiredGun\Mint\Mint;
+```
+use TheHiredGun\Mint\Mint;
 ...
 
 // Mint::__construct takes a PDO object as it's argument
@@ -45,7 +48,7 @@ $rowCount = $db->update('UPDATE books SET author = :author WHERE title in("Pale 
     'author' => 'Vladimir Nabokov',
 ]);
 
-// Mint::delete returns $stmt->rowCount()`
+// Mint::delete returns $stmt->rowCount()
 $rowCount = $db->delete('DELETE FROM books WHERE author = :author', ['author' => 'Vladimir Nabokov']);
 ```
 
