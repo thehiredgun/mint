@@ -3,8 +3,11 @@ A crisp PDO-abstraction layer class
 
 ### Installation:
 Recommended installation is via [Composer](https://getcomposer.org).
+
 `composer require thehiredgun/mint`
+
 or
+
 `"require": {
     ...,
     "thehiredgun/mint": "^1.0",
