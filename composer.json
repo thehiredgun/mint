@@ -1,5 +1,6 @@
 {
     "name": "thehiredgun/mint",
+    "description": "A PDO-abstraction layer package",
     "authors": [
         {
             "name": "Nick Wakeman",
@@ -7,6 +8,14 @@
             "url": "https://thehiredgun.tech"
         }
     ],
+    "keywords": [
+        "PHP",
+        "PDO",
+        "MySQL",
+        "SQLite",
+        "SQLite3"
+    ],
+    "license": "MIT",
     "require": {
         "php": ">=7.0.0"
     },
