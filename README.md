@@ -6,7 +6,7 @@ Recommended installation is via [Composer](https://getcomposer.org):
 
 ```composer require thehiredgun/mint```
 
-or in your composer.json:
+or, add this to your composer.json:
 
 ```
 "require": {
@@ -28,15 +28,18 @@ use TheHiredGun\Mint\Mint;
 // Mint::__construct takes a PDO object as it's argument
 $db = new Mint(new PDO($dsn, $username, $password));
 ```
-### These first four methods are used when you write a query manually
-Each is written to return the type of response you would typically want to receive when executing that type of query:
-- select returns an array of rows
-- selectOne returns the first returned row
+### These first four methods are used when you write a query manually:
+Each method returns the type of response you would typically want to receive when executing that type of query:
+- select returns the array of rows resulting from your query
+- selectOne returns the query result's first row
 - update returns the $PDOStatement->rowCount(), which is the number of rows affected by your query
 - delete also returns the $PDOStatement->rowCount()
-Each takes the query as it's first argument:
-```'UPDATE my_table SET token_one = :token_one, token_two = :token_two WHERE token_three = :token_three```
-And (optionally) as it's second argument, an associative array of parameters:
+
+Each of these methods takes a query as its first argument:
+```
+'UPDATE my_table SET token_one = :token_one, token_two = :token_two WHERE token_three = :token_three
+```
+And (optionally) as its second argument, an associative array of parameters:
 ```
 [
     'token_one'   => $token_one_value,
@@ -68,30 +71,23 @@ $numAffectedRows = $db->delete('DELETE FROM books WHERE author = :author', [
 ```
 
 ### Shorthand Methods
-There are a few shorthand methods which makes a lot of database-related work go much more quickly:
+There are a few shorthand methods which make a lot of commonly-executed operations go much more quickly:
+- selectOneById($table, $primaryKey) returns the record from $table with the $primaryKey
+- deleteOneById($table, $primaryKey) deletes the record from $table with the $primaryKey, and returns the number of affected rows
+- insertOne($table, $params) writes and executes and binds a parameterized INSERT query for $table (based on the meta data Mint gathered and the indexes in your $params), and returns the primary key of the new record. insert() *only* adds a column name, token, and parameter *if and when* the table has the column *and* your $params has an index for that column.
+- updateOne($table, $params, $primaryKey) writes, executes, and binds a parameterized UPDATE query for a the $table and record (with $primaryKey), only adding columns, tokens, and parameters *if and when* the table has the column *and* your $params has an index for that column.
 
 ```
-// Mint::selectOneById
-// takes a Table Name and the record's Primary Key as arguments
-// returns the record from that table with that primary key
-$db->selectOneById('books', $bookId); // returns the row from books where books' primary key = $bookId
+// returns the row from books where books' primary key = $bookId
+$db->selectOneById('books', $bookId);
 
-// Mint::deleteOneById
-// same arguments as selectOneById
-// returns $stmt->rowCount()
+// returns num of deleted rows (i.e. 1)
 $db->deleteOneById('books', $bookId);
 
-// Mint::insertOne
-// first argument is the name of the table to which you want to insert a record
-// second argument is an associative array of 'column_name' => $columnValue parameters to match the table
-// returns the primary key for the record you just
+// returns the primary key for the record you just inserted
 $bookId = $db->insertOne('books', ['author' => 'Vladimir Nabokov', 'title' => 'Pale Fire']);
 
-// Mint::updateOne
-// first argument is the name of the table to which you want to update a record
-// second argument is an associative array of 'column_name' => $columnValue parameters to match the table
-// third argument is the primary key of the recordy you want to update
-// returns $stmt->rowCount()
+// returns num affected rows (usually 1)
 $db->updateOne('books', ['author' => 'Vladimir Nabokov'], $bookId);
 ```
 
