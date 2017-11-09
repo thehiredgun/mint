@@ -52,19 +52,23 @@ Mint *always* tokenizes your parameters (i.e. adds ':' to the index for each par
 your *query* needs to be written with those tokens, your *array of parameters does not need to be*.
 
 ```
+// returns an array of rows from books where books.author = 'Vladimir Nabokov'
 $books = $db->select('SELECT * FROM books WHERE author = :author ORDER BY title ASC', [
     'author' => 'Vladimir Nabokov'
 ]);
 
+// returns the first of the record(s) returned from the query
 $bookId = $db->selectOne('SELECT * FROM books WHERE author = :author AND title = :title', [
     'title'  => 'Pale Fire',
     'author' => 'Vladimir Nabokov',
 ]);
 
+// returns the number of affected rows from the query
 $numAffectedRows = $db->update('UPDATE books SET author = :author WHERE title IN("Pale Fire", "Lolita")', [
     'author' => 'Vladimir Nabokov',
 ]);
 
+// returns the number of affected rows from the query
 $numAffectedRows = $db->delete('DELETE FROM books WHERE author = :author', [
     'author' => 'Vladimir Nabokov'
 ]);
@@ -74,7 +78,7 @@ $numAffectedRows = $db->delete('DELETE FROM books WHERE author = :author', [
 There are a few shorthand methods which make a lot of commonly-executed operations go much more quickly:
 - selectOneById($table, $primaryKey) returns the record from $table with the $primaryKey
 - deleteOneById($table, $primaryKey) deletes the record from $table with the $primaryKey, and returns the number of affected rows
-- insertOne($table, $params) writes and executes and binds a parameterized INSERT query for $table (based on the meta data Mint gathered and the indexes in your $params), and returns the primary key of the new record. insert() *only* adds a column name, token, and parameter *if and when* the table has the column *and* your $params has an index for that column.
+- insertOne($table, $params) writes, executes and binds a parameterized INSERT query for $table (based on the meta data Mint gathered and the indexes in your $params), and returns the primary key of the new record. insertOne() *only* adds a column name, token, and parameter *if and when* the table has the column *and* your $params has an index for that column.
 - updateOne($table, $params, $primaryKey) writes, executes, and binds a parameterized UPDATE query for a the $table and record (with $primaryKey), only adding columns, tokens, and parameters *if and when* the table has the column *and* your $params has an index for that column.
 
 ```
@@ -92,9 +96,15 @@ $db->updateOne('books', ['author' => 'Vladimir Nabokov'], $bookId);
 ```
 
 ### Hints, Best Practices, & Limitations
-- At present, *mint* works with MySQL and SQLite3. It can be extended to allow for the use of other PDO Drivers.
+- At present, *mint* works with MySQL and SQLite3. It can be extended to allow for the use of other PDO Drivers. (Please submit a Pull Request if you do!!!)
 - Generally speaking you want to configure your PDO error mode to 'Exception: `$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION)`
 - Mint binds *named parameters*, using the format ':' + column_name, so...:
-- If you are writing a query manually , you'll want to write the tokens with a ':' preceding them, and the indexes of the parameters you supply should match those tokens (Mint will automatically make sure each parameter-token has a ':')
-- If you are using a shorthand method like insertOne or updateOne, Mint will automatically match the your parameters with the columns of the table, and throw out any which do not match. No need to write a query, match parameters, or add ':' to your indexes. Mint will also *only* add columns and values to the query if they are included in you array of parameters.
+- If you are writing a query manually, you'll want to write the tokens with a ':' preceding them, and the indexes of the parameters you supply should match those tokens (Mint will automatically make sure each token has a ':')
+- If you are using a shorthand method like insertOne or updateOne, Mint will automatically match your parameters with the columns of the table, and throw out any which do not match. No need to write a query, match parameters, or add ':' to your indexes. Mint will *only* add columns and values to the query if they are included in you array of parameters.
+
+
+
+
+
+
 
